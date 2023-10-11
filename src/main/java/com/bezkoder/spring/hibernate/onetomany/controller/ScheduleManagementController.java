@@ -2,6 +2,7 @@ package com.bezkoder.spring.hibernate.onetomany.controller;
 
 import com.bezkoder.spring.hibernate.onetomany.dto.RequestTime;
 import com.bezkoder.spring.hibernate.onetomany.dto.ScheduleDTO;
+import com.bezkoder.spring.hibernate.onetomany.exception.ResourceNotFoundException;
 import com.bezkoder.spring.hibernate.onetomany.model.Detail;
 import com.bezkoder.spring.hibernate.onetomany.model.Schedule;
 import com.bezkoder.spring.hibernate.onetomany.service.DetailService;
@@ -16,6 +17,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
@@ -86,6 +88,40 @@ public class ScheduleManagementController {
         return new ResponseEntity<>(schedules, HttpStatus.OK);
 
     }
+
+
+    @PutMapping("admin/schedules/{id}")
+    public ResponseEntity<Optional<Schedule>> updateSchedule(@PathVariable("id") long id, @RequestBody Schedule schedule) {
+        Schedule _schedule = scheduleService.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Tutorial with id = " + id));
+        _schedule.setName(schedule.getName());
+        _schedule.setTrainingType(schedule.getTrainingType());
+        _schedule.setClassType(schedule.getClassType());
+        _schedule.setRoomInfo(schedule.getRoomInfo());
+        _schedule.setZoomLink(schedule.getZoomLink());
+        Schedule scheduleUpdate = scheduleService.saveSchedule(_schedule);
+
+        for (Detail detail : schedule.getListDetails()) {
+            detail.setSchedule(scheduleUpdate);
+            detailService.saveDetail(detail);
+        }
+
+        Optional<Schedule> resp = scheduleService.findById(id);
+        return new ResponseEntity<>(resp, HttpStatus.OK);
+    }
+
+
+//    @PutMapping("/tutorials/{id}")
+//    public ResponseEntity<Tutorial> updateTutorial(@PathVariable("id") long id, @RequestBody Tutorial tutorial) {
+//        Tutorial _tutorial = tutorialRepository.findById(id)
+//                .orElseThrow(() -> new ResourceNotFoundException("Not found Tutorial with id = " + id));
+//
+//        _tutorial.setTitle(tutorial.getTitle());
+//        _tutorial.setDescription(tutorial.getDescription());
+//        _tutorial.setPublished(tutorial.isPublished());
+//
+//        return new ResponseEntity<>(tutorialRepository.save(_tutorial), HttpStatus.OK);
+//    }
 
     @DeleteMapping("/admin/schedules")
     public ResponseEntity<HttpStatus> deleteAllTutorials() {

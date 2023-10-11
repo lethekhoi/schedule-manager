@@ -13,6 +13,8 @@ public interface ScheduleService {
 
     Schedule addSchedule(Schedule schedule);
 
+    Schedule saveSchedule(Schedule schedule);
+
     List<Schedule> findAll();
 
     List<Schedule> findAllByTime(RequestTime requestTime);

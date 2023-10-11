@@ -20,6 +20,10 @@ public class DetailServiceImpl implements DetailService {
     }
 
     @Override
+    public Detail saveDetail(Detail detail) {
+        return repository.save(detail);
+    }
+    @Override
     public List<Detail> listAll() {
         return repository.findAll();
     }

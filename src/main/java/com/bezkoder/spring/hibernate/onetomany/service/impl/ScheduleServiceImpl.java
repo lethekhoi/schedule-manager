@@ -24,7 +24,10 @@ public class ScheduleServiceImpl implements ScheduleService {
     public Schedule addSchedule(Schedule schedule) {
         return repository.save(schedule);
     }
-
+    @Override
+    public Schedule saveSchedule(Schedule schedule) {
+        return repository.save(schedule);
+    }
     @Override
     public List<Schedule> findAll() {
         return repository.findAll();
