@@ -3,6 +3,7 @@ package com.bezkoder.spring.hibernate.onetomany.exception;
 import java.util.Date;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -32,6 +33,17 @@ public class ControllerExceptionHandler {
         ex.getMessage(),
         request.getDescription(false));
     
+    return message;
+  }
+
+  @ExceptionHandler(BindException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)  // Nếu validate fail thì trả về 400
+  public ErrorMessage handleBindException(BindException e, WebRequest request) {
+    ErrorMessage message = new ErrorMessage(
+            HttpStatus.BAD_REQUEST.value(),
+            new Date(),
+            e.getBindingResult().getAllErrors().get(0).getDefaultMessage(),
+            request.getDescription(false));
     return message;
   }
 }

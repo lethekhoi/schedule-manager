@@ -12,7 +12,7 @@ public class Schedule {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String name;
+    private String courseName;
     private String trainingType;
     private String classType;
     private String zoomLink;
@@ -63,12 +63,12 @@ public class Schedule {
     }
 
 
-    public String getName() {
-        return name;
+    public String getCourseName() {
+        return courseName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCourseName(String name) {
+        this.courseName = name;
     }
 
     public List<Detail> getListDetails() {
@@ -81,7 +81,7 @@ public class Schedule {
 
     public Schedule(long id, String name, String trainingType, String classType, String zoomLink, String roomInfo, List<Detail> listDetails) {
         this.id = id;
-        this.name = name;
+        this.courseName = name;
         this.trainingType = trainingType;
         this.classType = classType;
         this.zoomLink = zoomLink;

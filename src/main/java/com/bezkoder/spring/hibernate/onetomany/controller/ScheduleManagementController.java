@@ -7,10 +7,14 @@ import com.bezkoder.spring.hibernate.onetomany.model.Detail;
 import com.bezkoder.spring.hibernate.onetomany.model.Schedule;
 import com.bezkoder.spring.hibernate.onetomany.service.DetailService;
 import com.bezkoder.spring.hibernate.onetomany.service.ScheduleService;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -29,9 +33,13 @@ public class ScheduleManagementController {
     DetailService detailService;
     @Autowired
     private ModelMapper modelMapper;
-
+    @Validated
     @PostMapping("/admin/schedules")
-    public ResponseEntity<ScheduleDTO> createSchedule(@RequestBody ScheduleDTO scheduleDTO) throws ParseException {
+    public ResponseEntity<ScheduleDTO> createSchedule(@RequestBody @Valid ScheduleDTO scheduleDTO, BindingResult bindingResult) throws ParseException, BindException {
+        if (bindingResult.hasErrors()){
+            throw new BindException(bindingResult);
+        }
+
         try {
             Schedule schedule = convertToEntity(scheduleDTO);
             //get all Detail startTime & endTime
@@ -94,7 +102,7 @@ public class ScheduleManagementController {
     public ResponseEntity<Optional<Schedule>> updateSchedule(@PathVariable("id") long id, @RequestBody Schedule schedule) {
         Schedule _schedule = scheduleService.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Tutorial with id = " + id));
-        _schedule.setName(schedule.getName());
+        _schedule.setCourseName(schedule.getCourseName());
         _schedule.setTrainingType(schedule.getTrainingType());
         _schedule.setClassType(schedule.getClassType());
         _schedule.setRoomInfo(schedule.getRoomInfo());
@@ -123,18 +131,18 @@ public class ScheduleManagementController {
 //        return new ResponseEntity<>(tutorialRepository.save(_tutorial), HttpStatus.OK);
 //    }
 
-    @DeleteMapping("/admin/schedules")
-    public ResponseEntity<HttpStatus> deleteAllTutorials() {
-        scheduleService.deleteAll();
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
+//    @DeleteMapping("/admin/schedules")
+//    public ResponseEntity<HttpStatus> deleteAllTutorials() {
+//        scheduleService.deleteAll();
+//
+//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//    }
 
     @DeleteMapping("/admin/schedules/{id}")
     public ResponseEntity<HttpStatus> deleteTutorial(@PathVariable("id") long id) {
         scheduleService.deleteById(id);
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

@@ -1,14 +1,28 @@
 package com.bezkoder.spring.hibernate.onetomany.dto;
 
+import jakarta.validation.constraints.NotEmpty;
+
 import java.util.List;
 
-public class ScheduleDTO {
+public class ScheduleDTO  {
     private long id;
+    @NotEmpty(message = "Training Type not be empty")
     private String trainingType;
+    @NotEmpty(message = "Course name may not be empty")
+    private String courseName;
+    @NotEmpty(message = "Class type may not be empty")
     private String classType;
     private String zoomLink;
     private String roomInfo;
     private List<DetailDTO> listDetails;
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
 
     public long getId() {
         return id;
