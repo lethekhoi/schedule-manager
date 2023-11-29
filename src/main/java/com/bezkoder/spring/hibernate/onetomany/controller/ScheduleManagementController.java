@@ -98,7 +98,16 @@ public class ScheduleManagementController {
     }
 
 
-    @PutMapping("admin/schedules/{id}")
+    @PostMapping("/user/schedules/{id}")
+    public ResponseEntity<ScheduleDTO> getByID(@PathVariable("id") long id){
+        Schedule _schedule = scheduleService.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found schedule with id = " + id));
+        ScheduleDTO response = convertToDto(_schedule);
+       return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
+    @PutMapping("/admin/schedules/{id}")
     public ResponseEntity<Optional<Schedule>> updateSchedule(@PathVariable("id") long id, @RequestBody Schedule schedule) {
         Schedule _schedule = scheduleService.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Tutorial with id = " + id));
