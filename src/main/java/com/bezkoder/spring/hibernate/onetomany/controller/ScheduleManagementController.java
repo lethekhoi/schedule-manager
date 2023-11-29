@@ -64,7 +64,7 @@ public class ScheduleManagementController {
             List<Schedule> schedules = new ArrayList<Schedule>();
             scheduleService.findAll().forEach(schedules::add);
             if (schedules.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                return new ResponseEntity<>(schedules,HttpStatus.OK);
             }
             return new ResponseEntity<>(schedules, HttpStatus.OK);
         } catch (Exception e) {
@@ -80,7 +80,7 @@ public class ScheduleManagementController {
         List<Schedule> schedules = new ArrayList<Schedule>();
         scheduleService.findAllByTime(requestTime).forEach(schedules::add);
         if (schedules.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(schedules, HttpStatus.OK);
 
