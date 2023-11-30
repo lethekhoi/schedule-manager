@@ -98,7 +98,7 @@ public class ScheduleManagementController {
     }
 
 
-    @PostMapping("/user/schedules/{id}")
+    @GetMapping("/user/schedules/{id}")
     public ResponseEntity<ScheduleDTO> getByID(@PathVariable("id") long id){
         Schedule _schedule = scheduleService.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found schedule with id = " + id));
