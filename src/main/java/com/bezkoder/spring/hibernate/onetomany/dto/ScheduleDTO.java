@@ -12,8 +12,16 @@ public class ScheduleDTO  {
     private String courseName;
     @NotEmpty(message = "Class type may not be empty")
     private String classType;
-    private String zoomLink;
-    private String roomInfo;
+    private String classInfo;
+
+    public String getClassInfo() {
+        return classInfo;
+    }
+
+    public void setClassInfo(String classInfo) {
+        this.classInfo = classInfo;
+    }
+
     private List<DetailDTO> listDetails;
 
     public String getCourseName() {
@@ -48,21 +56,6 @@ public class ScheduleDTO  {
         this.classType = classType;
     }
 
-    public String getZoomLink() {
-        return zoomLink;
-    }
-
-    public void setZoomLink(String zoomLink) {
-        this.zoomLink = zoomLink;
-    }
-
-    public String getRoomInfo() {
-        return roomInfo;
-    }
-
-    public void setRoomInfo(String roomInfo) {
-        this.roomInfo = roomInfo;
-    }
 
     public List<DetailDTO> getListDetails() {
         return listDetails;

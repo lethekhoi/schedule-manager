@@ -15,8 +15,7 @@ public class Schedule {
     private String courseName;
     private String trainingType;
     private String classType;
-    private String zoomLink;
-    private String roomInfo;
+    private String classInfo;
 
     @OneToMany(cascade = {CascadeType.ALL},
             fetch = FetchType.LAZY, mappedBy = "schedule")
@@ -46,22 +45,14 @@ public class Schedule {
         this.classType = classType;
     }
 
-    public String getZoomLink() {
-        return zoomLink;
+
+    public String getClassInfo() {
+        return classInfo;
     }
 
-    public void setZoomLink(String zoomLink) {
-        this.zoomLink = zoomLink;
+    public void setClassInfo(String classInfo) {
+        this.classInfo = classInfo;
     }
-
-    public String getRoomInfo() {
-        return roomInfo;
-    }
-
-    public void setRoomInfo(String roomInfo) {
-        this.roomInfo = roomInfo;
-    }
-
 
     public String getCourseName() {
         return courseName;
@@ -79,13 +70,12 @@ public class Schedule {
         this.listDetails = listEmployee;
     }
 
-    public Schedule(long id, String name, String trainingType, String classType, String zoomLink, String roomInfo, List<Detail> listDetails) {
+    public Schedule(long id, String name, String trainingType, String classType, String classInfo, List<Detail> listDetails) {
         this.id = id;
         this.courseName = name;
         this.trainingType = trainingType;
         this.classType = classType;
-        this.zoomLink = zoomLink;
-        this.roomInfo = roomInfo;
+        this.classInfo = classInfo;
         this.listDetails = listDetails;
     }
 

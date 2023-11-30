@@ -114,8 +114,7 @@ public class ScheduleManagementController {
         _schedule.setCourseName(schedule.getCourseName());
         _schedule.setTrainingType(schedule.getTrainingType());
         _schedule.setClassType(schedule.getClassType());
-        _schedule.setRoomInfo(schedule.getRoomInfo());
-        _schedule.setZoomLink(schedule.getZoomLink());
+        _schedule.setClassInfo(schedule.getClassInfo());
         Schedule scheduleUpdate = scheduleService.saveSchedule(_schedule);
 
         for (Detail detail : schedule.getListDetails()) {
