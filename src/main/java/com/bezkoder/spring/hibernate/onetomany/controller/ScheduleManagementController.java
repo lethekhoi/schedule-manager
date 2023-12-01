@@ -107,7 +107,7 @@ public class ScheduleManagementController {
     }
 
 
-    @PutMapping("/admin/schedules/{id}")
+    @PatchMapping("/admin/schedules/{id}")
     public ResponseEntity<Optional<Schedule>> updateSchedule(@PathVariable("id") long id, @RequestBody Schedule schedule) {
         Schedule _schedule = scheduleService.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Tutorial with id = " + id));
