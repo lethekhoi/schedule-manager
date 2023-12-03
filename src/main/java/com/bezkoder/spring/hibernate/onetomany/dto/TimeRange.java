@@ -26,24 +26,24 @@ public class TimeRange {
     }
 
 
-    public static TimeRange CreateTimeRange(RequestTime requestTime) {
+    public static TimeRange CreateTimeRange(TimeFrame timeFrame) {
         TimeRange timeRange = new TimeRange();
         Timestamp toTime = null, fromTime = null;
         LocalDateTime now = LocalDateTime.now();
 
 
-        switch (requestTime.getTimeFrame()) {
+        switch (timeFrame) {
             case nextWeek:
                 fromTime = Timestamp.valueOf(now);
-                toTime = Timestamp.valueOf(now.minusWeeks(1));
+                toTime = Timestamp.valueOf(now.plusWeeks(1));
                 break;
             case nextMonth:
                 fromTime = Timestamp.valueOf(now);
-                toTime = Timestamp.valueOf(now.minusMonths(1));
+                toTime = Timestamp.valueOf(now.plusMonths(1));
                 break;
             case nextYear:
                 fromTime = Timestamp.valueOf(now);
-                toTime = Timestamp.valueOf(now.minusYears(1));
+                toTime = Timestamp.valueOf(now.plusYears(1));
                 break;
             case lastWeek:
                 toTime = Timestamp.valueOf(now);
@@ -56,6 +56,8 @@ public class TimeRange {
             case lastYear:
                 toTime = Timestamp.valueOf(now);
                 fromTime = Timestamp.valueOf(now.minusYears(1));
+                break;
+            case all:
                 break;
         }
 

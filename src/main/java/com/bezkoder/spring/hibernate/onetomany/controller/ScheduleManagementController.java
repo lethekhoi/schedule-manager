@@ -1,5 +1,6 @@
 package com.bezkoder.spring.hibernate.onetomany.controller;
 
+import com.bezkoder.spring.hibernate.onetomany.dto.RequestSearch;
 import com.bezkoder.spring.hibernate.onetomany.dto.RequestTime;
 import com.bezkoder.spring.hibernate.onetomany.dto.ScheduleDTO;
 import com.bezkoder.spring.hibernate.onetomany.exception.ResourceNotFoundException;
@@ -86,16 +87,17 @@ public class ScheduleManagementController {
 
     }
 
-    @PostMapping("/user/schedules-by-trainer-name/{trainerName}")
-    public ResponseEntity<List<Schedule>> listScheduleByTrainerName(@PathVariable("trainerName") String trainerName) throws ParseException {
+    @PostMapping("/user/search")
+    public ResponseEntity<List<Schedule>> search(@RequestBody RequestSearch requestSearch) throws ParseException {
+
         List<Schedule> schedules = new ArrayList<Schedule>();
-        scheduleService.findAllByTrainerName(trainerName).forEach(schedules::add);
+        scheduleService.search(requestSearch).forEach(schedules::add);
         if (schedules.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(schedules,HttpStatus.OK);
         }
         return new ResponseEntity<>(schedules, HttpStatus.OK);
-
     }
+
 
 
     @GetMapping("/user/schedules/{id}")

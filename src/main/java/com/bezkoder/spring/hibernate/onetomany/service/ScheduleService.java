@@ -1,5 +1,6 @@
 package com.bezkoder.spring.hibernate.onetomany.service;
 
+import com.bezkoder.spring.hibernate.onetomany.dto.RequestSearch;
 import com.bezkoder.spring.hibernate.onetomany.dto.RequestTime;
 import com.bezkoder.spring.hibernate.onetomany.model.Schedule;
 import com.bezkoder.spring.hibernate.onetomany.repository.ScheduleRepository;
@@ -18,8 +19,8 @@ public interface ScheduleService {
     List<Schedule> findAll();
 
     List<Schedule> findAllByTime(RequestTime requestTime);
+    List<Schedule> search(RequestSearch requestSearch);
 
-    List<Schedule> findAllByTrainerName(String trainerName);
 
     Optional<Schedule> findById(Long scheduleId);
 

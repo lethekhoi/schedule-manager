@@ -11,11 +11,3 @@ public class RequestTime {
       this.timeFrame = timeFrame;
    }
 }
-enum TimeFrame {
-   nextWeek,
-   nextMonth,
-   nextYear,
-   lastWeek,
-   lastMonth,
-   lastYear,
-}
