@@ -1,0 +1,186 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    &lt;!&ndash; Include your CSS and other metadata here &ndash;&gt;-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="container mt-4">-->
+<!--    <h1 class="mb-4">All Training Schedules</h1>-->
+
+<!--    &lt;!&ndash; Filter Section &ndash;&gt;-->
+<!--    <div class="mb-3">-->
+<!--        <h3>Filter</h3>-->
+<!--        <form id="filterForm">-->
+<!--            &lt;!&ndash; Filter by Date, Week, Year &ndash;&gt;-->
+<!--            <div class="form-group">-->
+<!--                <label for="filterType">Filter by:</label>-->
+<!--                <select class="form-control" id="filterType" name="filterType">-->
+<!--                    <option value="day">Day</option>-->
+<!--                    <option value="week">Week</option>-->
+<!--                    <option value="year">Year</option>-->
+<!--                </select>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Filter Options (Day, Week, Year) &ndash;&gt;-->
+<!--            <div id="dayFilter" class="form-group">-->
+<!--                <label for="filterDate">Filter by Date:</label>-->
+<!--                <input type="date" class="form-control" id="filterDate" name="filterDate">-->
+<!--            </div>-->
+
+<!--            <div id="weekFilter" class="form-group" style="display: none;">-->
+<!--                <label for="filterQuarter">Filter by Quarter:</label>-->
+<!--                <select class="form-control" id="filterQuarter" name="filterQuarter">-->
+<!--                    <option value="Q1">Q1</option>-->
+<!--                    <option value="Q2">Q2</option>-->
+<!--                    <option value="Q3">Q3</option>-->
+<!--                    <option value="Q4">Q4</option>-->
+<!--                </select>-->
+<!--            </div>-->
+
+<!--            <div id="yearFilter" class="form-group" style="display: none;">-->
+<!--                <label for="filterYear">Filter by Year:</label>-->
+<!--                <input type="number" class="form-control" id="filterYear" name="filterYear">-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Submit Button &ndash;&gt;-->
+<!--            <button type="submit" class="btn btn-primary">Apply Filters</button>-->
+<!--        </form>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Training Schedules Table &ndash;&gt;-->
+<!--    &lt;!&ndash; Add your table here &ndash;&gt;-->
+<!--</div>-->
+
+<!--&lt;!&ndash; Include your JavaScript to handle filter toggling &ndash;&gt;-->
+<!--<script>-->
+<!--        const filterTypeSelect = document.getElementById("filterType");-->
+<!--        const dayFilter = document.getElementById("dayFilter");-->
+<!--        const weekFilter = document.getElementById("weekFilter");-->
+<!--        const yearFilter = document.getElementById("yearFilter");-->
+
+<!--        filterTypeSelect.addEventListener("change", function () {-->
+<!--            const selectedValue = this.value;-->
+<!--            dayFilter.style.display = selectedValue === "day" ? "block" : "none";-->
+<!--            weekFilter.style.display = selectedValue === "week" ? "block" : "none";-->
+<!--            yearFilter.style.display = selectedValue === "year" ? "block" : "none";-->
+<!--        });-->
+<!--    </script>-->
+<!--</body>-->
+<!--</html>-->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Include your CSS and other metadata here -->
+</head>
+<body>
+<div class="container mt-4">
+    <h1 class="mb-4">All Training Schedules</h1>
+
+    <!-- Filter Section -->
+    <div class="mb-3">
+        <h3>Filter</h3>
+        <form id="filterForm">
+            <!-- Filter by Type -->
+            <div class="form-group">
+                <label for="filterType">Filter by:</label>
+                <select class="form-control" id="filterType" name="filterType">
+                    <option value="day">Day</option>
+                    <option value="week">Week</option>
+                    <option value="month">Month</option>
+                    <option value="year">Year</option>
+                    <option value="quarter">Quarter</option>
+                    <option value="trainer">Trainer</option>
+                </select>
+            </div>
+
+            <!-- Filter Options -->
+            <div id="filterOptions" class="form-group">
+                <!-- The filter options will be dynamically added here based on the selected filter type -->
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary">Apply Filters</button>
+        </form>
+    </div>
+
+    <!-- Training Schedules Table -->
+    <!-- Add your table here -->
+</div>
+
+<!-- Include your JavaScript to handle filter option visibility -->
+<script>
+        const filterTypeSelect = document.getElementById("filterType");
+        const filterOptions = document.getElementById("filterOptions");
+
+        // Function to add filter options based on the selected filter type
+        function updateFilterOptions() {
+            const selectedValue = filterTypeSelect.value;
+            filterOptions.innerHTML = ""; // Clear previous options
+
+            if (selectedValue === "day") {
+                filterOptions.innerHTML = `
+                    <div class="form-group">
+                        <label for="filterDate">Filter by Date:</label>
+                        <input type="date" class="form-control" id="filterDate" name="filterDate">
+                    </div>
+                `;
+            } else if (selectedValue === "week") {
+                filterOptions.innerHTML = `
+                    <div class="form-group">
+                        <label for="filterWeek">Filter by Week:</label>
+                        <input type="number" class="form-control" id="filterWeek" name="filterWeek">
+                    </div>
+                `;
+            } else if (selectedValue === "month") {
+                filterOptions.innerHTML = `
+                    <div class="form-group">
+                        <label for="filterMonth">Filter by Month:</label>
+                        <input type="month" class="form-control" id="filterMonth" name="filterMonth">
+                    </div>
+                `;
+            } else if (selectedValue === "year") {
+                filterOptions.innerHTML = `
+                    <div class="form-group">
+                        <label for="filterYear">Filter by Year:</label>
+                        <input type="number" class="form-control" id="filterYear" name="filterYear" min="1990" max="2099">
+                    </div>
+                `;
+            } else if (selectedValue === "quarter") {
+                filterOptions.innerHTML = `
+                    <div class="form-group">
+                        <label for="filterQuarter">Filter by Quarter:</label>
+                        <select class="form-control" id="filterQuarter" name="filterQuarter">
+                            <option value="Q1">Q1</option>
+                            <option value="Q2">Q2</option>
+                            <option value="Q3">Q3</option>
+                            <option value="Q4">Q4</option>
+                        </select>
+                    </div>
+                `;
+            } else if (selectedValue === "trainer") {
+                // Add options for trainers dynamically from your data
+                // You can fetch trainers from your backend and populate this dropdown
+                filterOptions.innerHTML = `
+                    <div class="form-group">
+                        <label for="filterTrainer">Filter by Trainer:</label>
+                        <select class="form-control" id="filterTrainer" name="filterTrainer">
+                            <option value="trainer1">Trainer 1</option>
+                            <option value="trainer2">Trainer 2</option>
+                            <option value="trainer3">Trainer 3</option>
+                        </select>
+                    </div>
+                `;
+            }
+        }
+
+        // Initially, populate the filter options based on the selected filter type
+        updateFilterOptions();
+
+        // Listen for changes in the filter type select
+        filterTypeSelect.addEventListener("change", updateFilterOptions);
+    </script>
+</body>
+</html>

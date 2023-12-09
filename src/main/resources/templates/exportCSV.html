@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Export</title>
+</head>
+<body>
+
+<h1>CSV Export Example</h1>
+
+<button onclick="downloadCSV()">Export CSV</button>
+
+<script>
+    function downloadCSV() {
+        // Assuming you have the URL of your exportCSV endpoint
+        var exportCSVUrl = '/exportCSV';
+
+        // Create a hidden form
+        var form = document.createElement('form');
+        form.method = 'GET';
+        form.action = exportCSVUrl;
+
+        // Append the form to the body
+        document.body.appendChild(form);
+
+        // Submit the form
+        form.submit();
+
+        // Remove the form from the DOM
+        document.body.removeChild(form);
+    }
+</script>
+</body>
+</html>

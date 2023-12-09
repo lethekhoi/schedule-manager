@@ -1,12 +1,10 @@
 package com.bezkoder.spring.hibernate.onetomany.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
-
 @Data
-public class ScheduleDTO {
-    @NotBlank
+public class TrainingScheduleDTO {
+    String id;
     String courseName;
     String link;
     String classType;
@@ -14,5 +12,4 @@ public class ScheduleDTO {
     String trainingDate;
     String trainingTime;
     String trainer;
-
 }

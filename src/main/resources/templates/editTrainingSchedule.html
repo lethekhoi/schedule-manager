@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <title>Edit Training Schedule</title>
+</head>
+<body>
+<div class="container mt-4">
+    <h1 class="mb-4">Edit Schedule</h1>
+<!--    <form th:action="${schedule.id}/${schedule.trainingDate}/${schedule.trainingTime}/" method="post">-->
+    <form th:action="@{'/ui/edit/' + ${schedule.id} + '/' + ${schedule.trainingDate} + '/' + ${schedule.trainingTime} + '/'}" method="post">
+        <input type="hidden" name="id" th:value="${schedule.id}" />
+
+        <div class="form-group">
+            <label for="courseName">Course Name</label>
+            <input type="text" id="courseName" name="courseName" class="form-control" th:value="${schedule.courseName}" required />
+        </div>
+
+        <div class="form-group">
+            <label for="link">Link</label>
+            <input type="text" id="link" name="link" class="form-control" th:value="${schedule.link}" required />
+        </div>
+
+        <div class="form-group">
+            <label for="classType">Class Type</label>
+            <input type="text" id="classType" name="classType" class="form-control" th:value="${schedule.classType}" required />
+        </div>
+
+        <div class="form-group">
+            <label for="trainingType">Training Type</label>
+            <input type="text" id="trainingType" name="trainingType" class="form-control" th:value="${schedule.trainingType}" required />
+        </div>
+
+        <div class="form-group">
+            <label for="trainingDate">Training Date</label>
+            <input type="date" id="trainingDate" name="trainingDate" class="form-control" th:value="${schedule.trainingDate}" required />
+        </div>
+
+        <div class="form-group">
+            <label for="trainingTime">Training Time</label>
+            <input type="time" id="trainingTime" name="trainingTime" class="form-control" th:value="${schedule.trainingTime}" required />
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

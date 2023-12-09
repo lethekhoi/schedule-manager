@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Training Schedules</title>
+    <!-- Include Bootstrap CSS for styling -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Include your custom CSS file for additional styling -->
+    <link href="../css/styles.css" rel="stylesheet">
+
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .new-schedule-button {
+            position: fixed;
+            top: 150px;
+            right: 180px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+
+
+</head>
+<body>
+
+<div class="container mt-4">
+    <h1 class="mb-4">All Training Schedules</h1>
+    <label for="filterType">Choose Filter Type:</label>
+
+<!--    <button class="new-schedule-button" onclick="handleNewSchedule()">Add New Schedule</button>-->
+    <a th:href="'addSchedule/'"  class="new-schedule-button">Add New Schedule</a>
+
+    <select id="filterType" name="filterType">
+        <option value="quarter">Quarter</option>
+        <option value="classType">Class Type</option>
+        <option value="day" selected>By Day</option>
+        <option value="trainer">By Trainer</option>
+        <option value="week">By Week</option>
+        <option value="month">By Month</option>
+        <option value="year">By Year</option>
+    </select>
+
+    <div id="dynamicFilter"></div>
+
+    <button type="submit" onclick="applyFilter()">Apply Filter</button>
+
+
+    <div id="filteredSchedules">
+<!--        &lt;!&ndash; Display the filtered schedules here &ndash;&gt;-->
+<!--        <label for="trainer1">Choose Trainer:</label>-->
+<!--        <select id="trainer1" name="trainer1">-->
+<!--            <option th:each="trainer : ${trainerList}" th:value="${trainer}" th:text="${trainer}"></option>-->
+<!--        </select>-->
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Training Type</th>
+            <th>Class Type</th>
+            <th>Course Name</th>
+            <th>Training Date</th>
+            <th>Training Time</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody id="scheduleTable">
+        <!-- Sample row, you should generate rows dynamically based on your data -->
+        <tr th:each="schedule, rowStat : ${schedules}">
+            <td th:text="${rowStat.index + 1}"></td> <!-- Display row number starting from 1 -->
+<!--            <td th:text="${schedule.id}"></td>-->
+            <td th:text="${schedule.trainingType}"></td>
+            <td th:text="${schedule.classType}"></td>
+            <td th:text="${schedule.courseName}"></td>
+            <!--            <td th:text="${schedule.link}">Link</td>-->
+            <td th:text="${schedule.trainingDate}"></td>
+            <td th:text="${schedule.trainingTime}"></td>
+            <td>
+                <!-- View Button -->
+                <a th:href="'detail/' + ${schedule.id} + '/' + ${schedule.trainingDate} + '/' + ${schedule.trainingTime}"  class="btn btn-primary btn-sm">View</a>
+                <!-- Edit Button -->
+                <a th:href="'edit/' + ${schedule.id} + '/' + ${schedule.trainingDate} + '/' + ${schedule.trainingTime}" class="btn btn-warning btn-sm">Edit</a>
+
+                <!-- Delete Button -->
+                <a th:href="'delete/' + ${schedule.id} + '/' + ${schedule.trainingDate} + '/' + ${schedule.trainingTime}" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+
+    </table>
+
+
+    <button onclick="downloadCSV()">Export CSV</button>
+    <form th:action="@{/ui/filterByTrainer}" method="post">
+        <label for="trainer">Choose Trainer:</label>
+        <select id="trainer" name="trainer">
+            <option th:each="trainer : ${trainerList}"  th:value="${trainer}" th:text="${trainer}"></option>
+        </select>
+        <button type="submit" class="btn btn-primary">Apply</button>
+    </form>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var defaultFilter = 'day'; // Set the default filter type to 'day'
+    var filterType = document.getElementById('filterType');
+    var dynamicFilter = document.getElementById('dynamicFilter');
+
+    // Set the default filter to 'By Day'
+    filterType.value = defaultFilter;
+
+    // Simulate the 'change' event to apply the default filter on page load
+    var changeEvent = new Event('change');
+    filterType.dispatchEvent(changeEvent);
+});
+
+    document.getElementById('filterType').addEventListener('change', function() {
+        var filterType = document.getElementById('filterType').value;
+        var dynamicFilter = document.getElementById('dynamicFilter');
+        dynamicFilter.innerHTML = '';
+
+
+        if (filterType === 'quarter') {
+            dynamicFilter.innerHTML = `
+                <label for="quarterFilter">Choose Quarter:</label>
+                <select id="quarterFilter" name="quarterFilter">
+                    <option value="1">Q1</option>
+                    <option value="2">Q2</option>
+                    <option value="3">Q3</option>
+                    <option value="4">Q4</option>
+                </select>`;
+
+        } else if (filterType === 'classType') {
+            dynamicFilter.innerHTML = `
+                <label for="classTypeFilter">Choose Class Type:</label>
+                <select id="classTypeFilter" name="classTypeFilter">
+                    <option value="zoom">Zoom</option>
+                    <option value="room">Room</option>
+                </select>`;
+        } else if (filterType === 'day') {
+            var dynamicFilter = document.getElementById('dynamicFilter');
+            dynamicFilter.innerHTML = `
+                <label for="dayFilter">Choose Day:</label>
+                <input type="date" id="dayFilter" name="dayFilter" value="2023-01-01">
+            `;
+        } else if (filterType === 'trainer') {
+<!--            dynamicFilter.innerHTML = `-->
+<!--                <label for="trainerFilter">Choose Trainer:</label>-->
+<!--                <select id="trainerFilter" name="trainerFilter">-->
+<!--                    <option th:each="trainer : ${trainerList}" th:value="${trainer}" th:text="${trainer}"></option>-->
+<!--                </select>`;-->
+
+                var trainerOptions = /*[(${trainerList})]*/ [];
+            var optionsHtml = '';
+            trainerOptions.forEach(function(trainer) {
+                optionsHtml += '<option value="' + trainer + '">' + trainer + '</option>';
+            });
+
+            dynamicFilter.innerHTML = `
+                <label for="trainerFilter">Choose Trainer:</label>
+                <select id="trainerFilter" name="trainerFilter">
+<!--                    ${optionsHtml}-->
+                    <option th:each="trainer : [(${trainerList})]" th:value="${trainer}" th:text="${trainer}"></option>
+
+                </select>`;
+
+
+        } else if (filterType === 'week') {
+            dynamicFilter.innerHTML = `
+                <label for="weekFilter">Choose Week:</label>
+                <input type="number" id="weekFilter" name="weekFilter" min="1" max="52">`;
+        } else if (filterType === 'month') {
+            dynamicFilter.innerHTML = `
+                <label for="monthFilter">Choose Month:</label>
+                <select id="monthFilter" name="monthFilter">
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>`;
+        } else if (filterType === 'year') {
+            dynamicFilter.innerHTML = `
+                <label for="yearFilter">Choose Year:</label>
+                <input type="number" id="yearFilter" name="yearFilter" min="2022" max="2100">`;
+        } else if (filterType === 'trainer') {
+            // Trainer filter - populate with available trainers
+            dynamicFilter.innerHTML = `
+                <label for="trainerFilter">Choose Trainer:</label>
+                <select id="trainerFilter" name="trainerFilter">
+                    ${trainers.map(trainer => `<option value="${trainer.id}">${trainer.name}</option>`).join('')}
+                </select>`;
+        }
+        // Add other conditions for 'week', 'month', and 'year' filters as needed
+    });
+
+
+    function applyFilter() {
+        var filterType = document.getElementById('filterType').value;
+        if (filterType === 'day') {
+            var selectedDay = document.getElementById('dayFilter').value;
+            window.location.href = '../ui/filterByDay/' + selectedDay;
+        } else if (filterType === 'week') {
+            var selectedWeek = document.getElementById('weekFilter').value;
+            window.location.href = '../ui/filterByWeek/' + selectedWeek;
+        } else if (filterType === 'quarter') {
+            var selectedQuarter = document.getElementById('quarterFilter').value;
+            window.location.href = '../ui/filterByQuarter/' + selectedQuarter;
+        } else if (filterType === 'month') {
+            var selectedMonth = document.getElementById('monthFilter').value;
+            window.location.href = '../ui/filterByMonth/' + selectedMonth;
+        } else if (filterType === 'year') {
+            var selectedYear = document.getElementById('yearFilter').value;
+            window.location.href = '../ui/filterByYear/' + selectedYear;
+        } else if (filterType === 'classType') {
+            var selectedClassType = document.getElementById('classTypeFilter').value;
+            window.location.href = '../ui/filterByClassType/' + selectedClassType;
+        } else {
+            var selectedTrainer = document.getElementById('yearFilter').value;
+            window.location.href = '../ui/filterByTrainer/' + selectedTrainer;
+        }
+    }
+</script>
+
+
+<script>
+    function downloadCSV() {
+<!--        // Assuming you have the URL of your exportCSV endpoint-->
+<!--        var exportCSVUrl = '/exportCSV';-->
+
+<!--        // Create a hidden form-->
+<!--        var form = document.createElement('form');-->
+<!--        form.method = 'GET';-->
+<!--        form.action = exportCSVUrl;-->
+
+<!--        // Append the form to the body-->
+<!--        document.body.appendChild(form);-->
+
+<!--        // Submit the form-->
+<!--        form.submit();-->
+
+<!--        // Remove the form from the DOM-->
+<!--        document.body.removeChild(form);-->
+
+
+
+            fetch('/exportCSV')
+                .then(response => response.blob())
+                .then(blob => {
+                    // Create a link element to trigger the download
+                    const link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = 'training-schedules.csv';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                })
+                .catch(error => console.error('Error:', error));
+    }
+</script>
+
+
+<!-- Include jQuery and Bootstrap JavaScript for functionality -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- Include your custom JavaScript file for handling filters and actions -->
+<script src="custom.js"></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Training Schedules</title>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<h1>Welcome to the Training Application</h1>-->
+<!--<h5>Training Schedules</h5>-->
+
+<!--<table>-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--        <th>#</th> &lt;!&ndash; Add a column for row numbers &ndash;&gt;-->
+<!--        <th>Course Name</th>-->
+<!--        <th>Link</th>-->
+<!--        <th>Class Type</th>-->
+<!--        <th>Training Type</th>-->
+<!--        <th>Training Date</th>-->
+<!--        <th>Training Time</th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--    &lt;!&ndash; Use Thymeleaf's th:each to iterate and th:text to display data &ndash;&gt;-->
+<!--    <tr th:each="schedule, rowStat : ${schedules}">-->
+<!--        <td th:text="${rowStat.index + 1}">1</td> &lt;!&ndash; Display row number starting from 1 &ndash;&gt;-->
+<!--        <td th:text="${schedule.courseName}">Course Name</td>-->
+<!--        <td th:text="${schedule.link}">Link</td>-->
+<!--        <td th:text="${schedule.classType}">Class Type</td>-->
+<!--        <td th:text="${schedule.trainingType}">Training Type</td>-->
+<!--        <td th:text="${schedule.trainingDate}">Training Date</td>-->
+<!--        <td th:text="${schedule.trainingTime}">Training Time</td>-->
+<!--    </tr>-->
+<!--    </tbody>-->
+<!--</table>-->
+<!--<div th:unless="${#authorization.expression('isAuthenticated()')}">-->
+<!--    <p>Please <a href="/login">log in</a> to access the training schedule.</p>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->

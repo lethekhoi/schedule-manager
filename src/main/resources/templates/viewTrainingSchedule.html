@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Training Schedule</title>
+    <!-- Add Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Add your custom CSS file (if any) -->
+    <link rel="stylesheet" href="custom.css">
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Training App</a>
+        <!-- Add navigation links or buttons here -->
+    </nav>
+</header>
+
+<main class="container mt-4">
+    <h1>View Training Schedule</h1>
+    <!-- Add your content here -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <!-- Display training schedule details here -->
+                    <h5 class="card-title">Training Schedule Details</h5>
+                    <p class="card-text">
+                        Course Name: <span id="courseName" th:text="${schedule.courseName}"></span><br>
+                        Link: <span id="link" th:text="${schedule.link}"></span><br>
+
+                        Training Date: <span id="trainingDate" th:text="${schedule.trainingDate}"></span><br>
+                        Training Time: <span id="trainingTime" th:text="${schedule.trainingTime}"></span><br>
+                        Training Type: <span id="trainingType" th:text="${schedule.trainingType}"></span><br>
+                        Class Type: <span id="classType" th:text="${schedule.classType}"></span><br>
+                        <!-- Add more details as needed -->
+                    </p>
+                    <div class="mt-4">
+                        <h6>Trainers:</h6>
+                        <ul>
+                            <li th:each="trainer : ${trainers}" th:text="${trainer.userName}"></li>
+                        </ul>
+                    </div>
+<!--                    <a th:href="@{/ui/edit/{id}(id=${schedule.id})/{trainingDate}(trainingDate=${schedule.trainingDate})/{trainingTime}(trainingTime=${schedule.trainingTime})}" class="btn btn-primary">Edit</a>-->
+                    <a th:href="@{'/ui/edit/' + ${schedule.id} + '/' + ${schedule.trainingDate} + '/' + ${schedule.trainingTime} + '/'}" class="btn btn-primary">Edit</a>
+                    <a href="@{'../../../../../../ui/delete/' + ${schedule.id} + '/' + ${schedule.trainingDate} + '/' + ${schedule.trainingTime} + '/'}" class="btn btn-danger">Delete</a>
+                    <a href="javascript:history.go(-1)" class="btn btn-secondary">Back</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<footer class="text-center mt-4">
+    <!-- Add footer content here -->
+    <p>&copy; 2023 Training App</p>
+</footer>
+
+<!-- Add Bootstrap JS and jQuery scripts -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

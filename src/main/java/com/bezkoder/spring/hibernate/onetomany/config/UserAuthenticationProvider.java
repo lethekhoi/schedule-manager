@@ -7,7 +7,6 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.bezkoder.spring.hibernate.onetomany.dto.CredentialsDto;
 import com.bezkoder.spring.hibernate.onetomany.dto.UserDto;
 import com.bezkoder.spring.hibernate.onetomany.service.AuthenticationService;
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,24 +17,19 @@ import org.springframework.stereotype.Component;
 
 
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
 @Component
 public class UserAuthenticationProvider {
 
-    @Value("${security.jwt.token.secret-key:secret-key}")
-    private String secretKey;
+    @Value("${jwt.secretKey}")
+    private String secretKey = "springsecurityjwtsecuritykey";
 
     @Autowired
     private AuthenticationService authenticationService;
 
-    @PostConstruct
-    protected void init() {
-        // this is to avoid having the raw secret key available in the JVM
-        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
-    }
+
 
     public String createToken(String login) {
         Date now = new Date();

@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: nthquyen@humana.com
+      comment: Create table
+      changes:
+        - sqlFile:
+            path: db/sql/add-data.sql

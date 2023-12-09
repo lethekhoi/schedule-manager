@@ -27,10 +27,10 @@ public class AuthenticationService {
     }
 
     public UserDto findByLogin(String loginId) {
-        if ("admin01".equals(loginId)) {
-            return new UserDto(1L, "TMA User01", "ADMIN", "admin01", "token");
-        }
         if ("user01".equals(loginId)) {
+            return new UserDto(1L, "TMA User01", "ADMIN", "user01", "token");
+        }
+        if ("user02".equals(loginId)) {
             return new UserDto(1L, "TMA User02", "USER", "user01", "token");
         }
         throw new RuntimeException("Invalid loginId");

@@ -1,0 +1,166 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta http-equiv="X-UA-Compatible" content="IE=edge">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Add Training Schedule</title>-->
+<!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.7.2/dist/css/bootstrap.min.css">-->
+<!--    <link rel="stylesheet" href="/css/styles.css">-->
+
+<!--</head>-->
+<!--<body>-->
+<!--<div class="container mt-5">-->
+<!--    <h2>Add Training Schedule</h2>-->
+<!--    <form action="/addSchedule" method="post">-->
+<!--        <div class="mb-3">-->
+<!--            <label for="trainingType" class="form-label">Training Type</label>-->
+<!--            <input type="text" class="form-control" id="trainingType" name="trainingType" required>-->
+<!--        </div>-->
+<!--        <div class="mb-3">-->
+<!--            <label for="classType" class="form-label">Class Type</label>-->
+<!--            <input type="text" class="form-control" id="classType" name="classType" required>-->
+<!--        </div>-->
+<!--        <div class="mb-3">-->
+<!--            <label for="courseId" class="form-label">Course ID</label>-->
+<!--            <input type="text" class="form-control" id="courseId" name="courseId" required>-->
+<!--        </div>-->
+<!--        <div class="mb-3">-->
+<!--            <label for="trainingDate" class="form-label">Training Date</label>-->
+<!--            <input type="date" class="form-control" id="trainingDate" name="trainingDate" required>-->
+<!--        </div>-->
+<!--        <div class="mb-3">-->
+<!--            <label for="trainingTime" class="form-label">Training Time</label>-->
+<!--            <input type="time" class="form-control" id="trainingTime" name="trainingTime" required>-->
+<!--        </div>-->
+<!--        <button type="submit" class="btn btn-primary">Add Schedule</button>-->
+<!--    </form>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <title>Edit Training Schedule</title>
+</head>
+<body>
+<div class="container mt-4">
+    <h1 class="mb-4">Edit Schedule</h1>
+    <form th:action="@{/ui/addSchedule}" method="post">
+        <input type="hidden" name="id" />
+
+        <div class="form-group">
+            <label for="courseName">Course Name</label>
+            <input type="text" id="courseName" name="courseName" class="form-control" equired />
+        </div>
+
+        <div class="form-group">
+            <label for="classType">Class Type</label>
+
+            <select id="classType" name="classType" class="form-control" required>
+                <option th:each="type : ${classTypes}" th:value="${type}" th:text="${type}"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="trainingType">Training Type</label>
+            <!-- Sử dụng th:each để lặp qua tất cả giá trị của enum -->
+            <select id="trainingType", name="trainingType">
+                <option th:each="type : ${trainingTypes}"
+                        th:value="${type}" th:text="${type}">
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="trainer">Trainer</label>
+            <select id="trainer" name="trainer" class="form-control">
+                <!-- Iterate over the trainers and create options -->
+                <option th:each="trainer : ${trainers}"  th:value="${trainer}" th:text="${trainer}"></option>
+            </select>
+
+
+        </div>
+
+        <div class="form-group">
+            <label for="trainingDate">Training Date</label>
+            <input type="date" id="trainingDate" name="trainingDate" class="form-control" required />
+        </div>
+
+        <div class="form-group">
+            <label for="trainingTime">Training Time</label>
+            <input type="time" id="trainingTime" name="trainingTime" class="form-control" required />
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>
+
+
+
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">-->
+<!--    <title>Add Training Schedule</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="container mt-4">-->
+<!--    <h1 class="mb-4">Add Training Schedule</h1>-->
+<!--    <form th:action="@{/ui/addSchedule}" method="post">-->
+<!--        <div class="form-group">-->
+<!--            <label for="courseName">Course Name</label>-->
+<!--            <input type="text" id="courseName" name="courseName" class="form-control" th:field="*{courseName}" required />-->
+<!--        </div>-->
+
+<!--        <div class="form-group">-->
+<!--            <label for="link">Link</label>-->
+<!--            <input type="text" id="link" name="link" class="form-control" th:field="*{link}" />-->
+<!--        </div>-->
+
+<!--        <div class="form-group">-->
+<!--            <label for="classType">Class Type</label>-->
+<!--            <select id="classType" name="classType" class="form-control" th:field="*{classType}" required>-->
+<!--                <option th:each="type : ${classTypes}" th:value="${type}" th:text="${type}"></option>-->
+<!--            </select>-->
+<!--        </div>-->
+
+<!--        <div class="form-group">-->
+<!--            <label for="trainingType">Training Type</label>-->
+<!--            <select id="trainingType" name="trainingType" class="form-control" th:field="*{trainingType}" required>-->
+<!--                <option th:each="type : ${trainingTypes}" th:value="${type}" th:text="${type}"></option>-->
+<!--            </select>-->
+<!--        </div>-->
+
+<!--        <div class="form-group">-->
+<!--            <label for="trainingDate">Training Date</label>-->
+<!--            <input type="date" id="trainingDate" name="trainingDate" class="form-control" th:field="*{trainingDate}" required />-->
+<!--        </div>-->
+
+<!--        <div class="form-group">-->
+<!--            <label for="trainingTime">Training Time</label>-->
+<!--            <input type="time" id="trainingTime" name="trainingTime" class="form-control" th:field="*{trainingTime}" required />-->
+<!--        </div>-->
+
+<!--        <div class="form-group">-->
+<!--            <label for="userName">Trainer</label>-->
+<!--            <select id="userName" name="userName" class="form-control" th:field="*{userName}" required>-->
+<!--                <option th:each="trainer : ${trainers}" th:value="${trainer}" th:text="${trainer}"></option>-->
+<!--            </select>-->
+<!--        </div>-->
+
+<!--        <div class="text-center">-->
+<!--            <button type="submit" class="btn btn-primary">Add Schedule</button>-->
+<!--        </div>-->
+<!--    </form>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->

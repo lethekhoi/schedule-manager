@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Training Schedules</title>
+    <!-- Include Bootstrap CSS for styling -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Include your custom CSS file for additional styling -->
+    <link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-4">
+    <h1 class="mb-4">All Training Schedules</h1>
+    <label for="filterType">Choose Filter Type:</label>
+    <select id="filterType" name="filterType">
+        <option value="quarter">Quarter</option>
+        <option value="classType">Class Type</option>
+        <option value="day" selected>By Day</option>
+        <option value="trainer">By Trainer</option>
+        <option value="week">By Week</option>
+        <option value="month">By Month</option>
+        <option value="year">By Year</option>
+    </select>
+
+    <div id="dynamicFilter"></div>
+
+    <button type="submit" onclick="applyFilter()">Apply Filter</button>
+
+    <div id="filteredSchedules">
+        <!-- Display the filtered schedules here -->
+    </div>
+<!--    <table class="table table-striped">-->
+<!--        <thead>-->
+<!--        <tr>-->
+<!--            <th>ID</th>-->
+<!--            <th>Training Type</th>-->
+<!--            <th>Class Type</th>-->
+<!--            <th>Course Name</th>-->
+<!--            <th>Training Date</th>-->
+<!--            <th>Training Time</th>-->
+<!--            <th>Actions</th>-->
+<!--        </tr>-->
+<!--        </thead>-->
+<!--        <tbody id="scheduleTable">-->
+<!--        &lt;!&ndash; Add more rows dynamically based on your data &ndash;&gt;-->
+<!--        </tbody>-->
+
+<!--    </table>-->
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var defaultFilter = 'day'; // Set the default filter type to 'day'
+    var filterType = document.getElementById('filterType');
+    var dynamicFilter = document.getElementById('dynamicFilter');
+
+    // Set the default filter to 'By Day'
+    filterType.value = defaultFilter;
+
+    // Simulate the 'change' event to apply the default filter on page load
+    var changeEvent = new Event('change');
+    filterType.dispatchEvent(changeEvent);
+});
+
+    document.getElementById('filterType').addEventListener('change', function() {
+        var filterType = document.getElementById('filterType').value;
+        var dynamicFilter = document.getElementById('dynamicFilter');
+        dynamicFilter.innerHTML = '';
+
+        if (filterType === 'quarter') {
+            // Quarter filter - populate with Q1, Q2, Q3, Q4
+            dynamicFilter.innerHTML = `
+                <label for="quarterFilter">Choose Quarter:</label>
+                <select id="quarterFilter" name="quarterFilter">
+                    <option value="Q1">Q1</option>
+                    <option value="Q2">Q2</option>
+                    <option value="Q3">Q3</option>
+                    <option value="Q4">Q4</option>
+                </select>`;
+
+        } else if (filterType === 'classType') {
+            // Class type filter - populate with available class types
+            dynamicFilter.innerHTML = `
+                <label for="classTypeFilter">Choose Class Type:</label>
+                <select id="classTypeFilter" name="classTypeFilter">
+                    <option value="zoom">Zoom</option>
+                    <option value="room">Room</option>
+                    <!-- Add more options if needed -->
+                </select>`;
+        } else if (filterType === 'day') {
+            // Day filter - populate with available days
+            // Assuming you have an array of days: ['1', '2', ..., '31']
+            var days = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'];
+            dynamicFilter.innerHTML = `
+                <label for="dayFilter">Choose Day:</label>
+                <select id="dayFilter" name="dayFilter">
+                    ${days.map(day => `<option value="${day}">${day}</option>`).join('')}
+                </select>`;
+        }else if (filterType === 'week') {
+            dynamicFilter.innerHTML = `
+                <label for="weekFilter">Choose Week:</label>
+                <input type="number" id="weekFilter" name="weekFilter" min="1" max="52">`;
+        } else if (filterType === 'month') {
+            dynamicFilter.innerHTML = `
+                <label for="monthFilter">Choose Month:</label>
+                <select id="monthFilter" name="monthFilter">
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <!-- Add other months -->
+                </select>`;
+        } else if (filterType === 'year') {
+            dynamicFilter.innerHTML = `
+                <label for="yearFilter">Choose Year:</label>
+                <input type="number" id="yearFilter" name="yearFilter" min="1990" max="2100">`;
+        } else if (filterType === 'trainer') {
+            // Trainer filter - populate with available trainers
+            dynamicFilter.innerHTML = `
+                <label for="trainerFilter">Choose Trainer:</label>
+                <select id="trainerFilter" name="trainerFilter">
+                    ${trainers.map(trainer => `<option value="${trainer.id}">${trainer.name}</option>`).join('')}
+                </select>`;
+        }
+        // Add other conditions for 'week', 'month', and 'year' filters as needed
+    });
+
+
+
+
+
+        function applyFilter() {
+            var filterType = document.getElementById('filterType').value;
+
+            if (filterType === 'month') {
+                var selectedMonth = document.getElementById('monthFilter').value;
+
+                // Redirect to the filterByMonth page with the selected month
+                window.location.href = '../ui/filterByMonth/' + selectedMonth;
+            } else {
+                window.location.href = '../ui/filterByDay/' + selectedMonth;
+            }
+        }
+
+
+
+
+
+<!--    function applyFilter() {-->
+<!--        const selectedFilter = document.getElementById('filterType').value;-->
+<!--        if (selectedFilter === 'month') {-->
+<!--            handleMonthFilter();-->
+<!--        }-->
+<!--        // Handle other filters here based on their selected values-->
+<!--    }-->
+
+<!--    function handleMonthFilter() {-->
+<!--        const selectedMonth = document.getElementById('monthFilter').value; // Fetch the selected month value-->
+<!--        fetch(`../ui/filterByMonth/${selectedMonth}`) // Endpoint for fetching schedules by month-->
+<!--            .then(response => response.json())-->
+<!--            .then(data => {-->
+<!--                displayFilteredSchedules(data); // Display schedules based on the month-->
+<!--            })-->
+<!--            .catch(error => {-->
+<!--                console.error('Error:', error);-->
+<!--            });-->
+<!--    }-->
+
+
+<!--    function displayFilteredSchedules(data) {-->
+<!--        var filteredSchedules = document.getElementById('filteredSchedules');-->
+<!--        filteredSchedules.innerHTML = '';-->
+
+<!--        // Update filtered schedules in the DOM-->
+<!--        data.forEach(schedule => {-->
+<!--            var scheduleElement = document.createElement('p');-->
+<!--            scheduleElement.textContent = `ID: ${schedule.id}, Training Type: ${schedule.trainingType}, Class Type: ${schedule.classType}`;-->
+<!--            filteredSchedules.appendChild(scheduleElement);-->
+<!--        });-->
+<!--    }-->
+</script>
+
+
+
+
+
+
+<!-- Include jQuery and Bootstrap JavaScript for functionality -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- Include your custom JavaScript file for handling filters and actions -->
+<script src="custom.js"></script>
+</body>
+</html>
