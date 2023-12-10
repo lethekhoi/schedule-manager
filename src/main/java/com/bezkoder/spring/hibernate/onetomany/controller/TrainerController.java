@@ -1,7 +1,9 @@
 package com.bezkoder.spring.hibernate.onetomany.controller;
 
 
+import com.bezkoder.spring.hibernate.onetomany.dto.TrainerDto;
 import com.bezkoder.spring.hibernate.onetomany.model.ResponseObject;
+import com.bezkoder.spring.hibernate.onetomany.model.Trainer;
 import com.bezkoder.spring.hibernate.onetomany.service.TrainerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,8 +23,7 @@ public class TrainerController {
     @GetMapping("")
     public ResponseEntity<ResponseObject> getTrainer() {
         ResponseObject object = new ResponseObject();
-        List<String> listTrainerName =trainerService.getAllTrainer();
-
+        List<TrainerDto> listTrainerName =trainerService.getAllTrainer();
         object.setData(listTrainerName);
         return new ResponseEntity<>(object, HttpStatus.OK);
     }

@@ -1,13 +1,16 @@
 package com.bezkoder.spring.hibernate.onetomany.controller;
 
 
+import com.bezkoder.spring.hibernate.onetomany.dto.FilterDto;
 import com.bezkoder.spring.hibernate.onetomany.dto.ScheduleDTO;
+import com.bezkoder.spring.hibernate.onetomany.dto.TrainerDto;
 import com.bezkoder.spring.hibernate.onetomany.dto.TrainingScheduleDTO;
 import com.bezkoder.spring.hibernate.onetomany.exception.ResourceNotFoundException;
 import com.bezkoder.spring.hibernate.onetomany.model.Course;
 import com.bezkoder.spring.hibernate.onetomany.model.ResponseObject;
 import com.bezkoder.spring.hibernate.onetomany.model.TrainingSchedules;
 import com.bezkoder.spring.hibernate.onetomany.repository.CourseRepository;
+import com.bezkoder.spring.hibernate.onetomany.service.TrainerService;
 import com.bezkoder.spring.hibernate.onetomany.service.TrainingScheduleService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +18,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 @RestController
 @RequestMapping("/schedule")
@@ -30,11 +33,14 @@ public class TrainingScheduleController {
 
     @Autowired
     private TrainingScheduleService trainingScheduleService;
+    @Autowired
+    private TrainerService trainerService;
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("HH:mm");
     @Autowired
     private CourseRepository courseRepository;
+    private List<TrainerDto> listTrainer = new ArrayList<>();
 
     @PostMapping()
     public ResponseEntity<ResponseObject> addSchedule(@RequestBody ScheduleDTO scheduleDTO) {
@@ -62,9 +68,37 @@ public class TrainingScheduleController {
 
     }
 
+    @PostMapping("/filter")
+    public ResponseEntity<ResponseObject> filterSchedule(@RequestBody FilterDto filterDto) {
+        try {
+
+            listTrainer = trainerService.getAllTrainer();
+            List<TrainingSchedules> trainingSchedules = trainingScheduleService.listByFilter(filterDto);
+
+
+            List<TrainingScheduleDTO> resp = new ArrayList<>();
+            trainingSchedules.forEach((t) -> {
+                TrainingScheduleDTO dto = convertToTrainingScheduleDTO(t);
+                resp.add(dto);
+            });
+
+            ResponseObject object = new ResponseObject();
+            object.setMessage("Success");
+            object.setStatus(200);
+            object.setData(resp);
+            return new ResponseEntity<>(object, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to create schedule: " + e.getMessage());
+        }
+
+    }
+
     @GetMapping()
     public ResponseEntity<ResponseObject> listAllSchedule() {
         try {
+
+
+            listTrainer = trainerService.getAllTrainer();
             List<TrainingSchedules> trainingSchedules = trainingScheduleService.listAllSchedule();
             List<TrainingScheduleDTO> resp = new ArrayList<>();
             trainingSchedules.forEach((t) -> {
@@ -173,15 +207,31 @@ public class TrainingScheduleController {
         TrainingScheduleDTO trainingScheduleDTO = new TrainingScheduleDTO();
         trainingScheduleDTO.setId(trainingSchedules.getId() + "");
         trainingScheduleDTO.setCourseName(trainingSchedules.getCourse().getCourseName());
-        trainingScheduleDTO.setLink(trainingSchedules.getCourse().getLink());
-        trainingScheduleDTO.setTrainer(trainingSchedules.getTrainer());
+        if (trainingSchedules.getCourse().getLink() == null) {
+            trainingScheduleDTO.setLink("");
+        } else {
+            trainingScheduleDTO.setLink(trainingSchedules.getCourse().getLink());
+        }
+
         trainingScheduleDTO.setClassType(trainingSchedules.getClassType());
         trainingScheduleDTO.setTrainingType(trainingSchedules.getTrainingType());
         trainingScheduleDTO.setTrainingDate(trainingSchedules.getTrainingDate().toString());
         trainingScheduleDTO.setTrainingTime(trainingSchedules.getTrainingTime().toString());
 
 
+        trainingScheduleDTO.setTrainer(resolveTrainerName(trainingSchedules.getTrainer()));
+
+
         return trainingScheduleDTO;
+    }
+
+    private String resolveTrainerName(String id) {
+        for (TrainerDto t : listTrainer) {
+            if (t.getId().equals(id)) {
+                return t.getName();
+            }
+        }
+        return "";
     }
 
 }

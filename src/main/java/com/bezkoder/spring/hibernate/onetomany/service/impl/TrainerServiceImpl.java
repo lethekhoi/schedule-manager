@@ -1,5 +1,6 @@
 package com.bezkoder.spring.hibernate.onetomany.service.impl;
 
+import com.bezkoder.spring.hibernate.onetomany.dto.TrainerDto;
 import com.bezkoder.spring.hibernate.onetomany.model.Trainer;
 import com.bezkoder.spring.hibernate.onetomany.repository.TrainerRepository;
 import com.bezkoder.spring.hibernate.onetomany.service.TrainerService;
@@ -20,14 +21,13 @@ public class TrainerServiceImpl implements TrainerService {
     TrainerRepository trainerRepository;
 
     @Override
-    public List<String> getAllTrainer() {
+    public List<TrainerDto> getAllTrainer() {
+        List<TrainerDto> list = new ArrayList<>();
         List<Trainer> trainers = trainerRepository.findAll();
-
-        List<String> listTrainerName = new ArrayList<>();
         trainers.forEach(trainer -> {
-            listTrainerName.add(trainer.getName());
+            TrainerDto dto= new TrainerDto(trainer.getId()+"", trainer.getName());
+            list.add(dto);
         });
-
-        return listTrainerName;
+        return list;
     }
 }
